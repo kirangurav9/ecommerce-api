@@ -7,6 +7,7 @@ import com.ecommerce.ecommerce.exception.OrderNotFoundException;
 import com.ecommerce.ecommerce.repository.CustomerRepository;
 import com.ecommerce.ecommerce.repository.OrderRepository;
 import com.ecommerce.ecommerce.service.OrderService;
+import com.ecommerce.ecommerce.dto.OrderDTO;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -55,5 +56,17 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderNotFoundException("Order not found with id: " + id);
         }
         orderRepo.deleteById(id);
+    }
+
+    @Override
+    public Order updateOrder(Long id, OrderDTO orderDTO) {
+        Order existing = orderRepo.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
+
+        existing.setOrderDate(orderDTO.getOrderDate());
+        existing.setAmount(orderDTO.getAmount());
+        existing.setStatus(orderDTO.getStatus());
+
+        return orderRepo.save(existing);
     }
 }

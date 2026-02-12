@@ -4,10 +4,9 @@ import com.ecommerce.ecommerce.entity.Customer;
 import com.ecommerce.ecommerce.exception.CustomerNotFoundException;
 import com.ecommerce.ecommerce.repository.CustomerRepository;
 import com.ecommerce.ecommerce.service.CustomerService;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -30,8 +29,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> getAllCustomers() {
-        return repo.findAll();
+    public Page<Customer> getAllCustomers(Pageable pageable) {
+        return repo.findAll(pageable);
     }
 
     @Override

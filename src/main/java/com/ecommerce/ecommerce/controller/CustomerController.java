@@ -4,10 +4,9 @@ import com.ecommerce.ecommerce.dto.CustomerDTO;
 import com.ecommerce.ecommerce.dto.DtoMapper;
 import com.ecommerce.ecommerce.entity.Customer;
 import com.ecommerce.ecommerce.service.CustomerService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/customers")
@@ -26,11 +25,12 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<CustomerDTO> getAllCustomers() {
-        return service.getAllCustomers()
-                .stream()
-                .map(DtoMapper::toCustomerDTO)
-                .collect(Collectors.toList());
+    public Page<CustomerDTO> getAllCustomers(
+            @RequestParam int page,
+            @RequestParam int size) {
+
+        return service.getAllCustomers(PageRequest.of(page, size))
+                      .map(DtoMapper::toCustomerDTO);
     }
 
     @GetMapping("/{id}")
